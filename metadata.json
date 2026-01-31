@@ -1,0 +1,7 @@
+{
+  "name": "VÉRTICE - CRM Imobiliário",
+  "description": "Sistema de gestão operacional para corretores e imobiliárias focado em simplicidade, site público funcional e assistência por IA.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
