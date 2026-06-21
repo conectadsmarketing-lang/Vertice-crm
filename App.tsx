@@ -2,15 +2,15 @@
 import React, { useState } from 'react';
 import { AppView, AdminSubView, User } from './types';
 import { StorageService } from './services/storage';
-import { 
-  LayoutDashboard, 
-  Home as HomeIcon, 
-  Users, 
-  Globe, 
-  LogOut, 
-  Menu, 
-  X, 
-  Plus, 
+import {
+  LayoutDashboard,
+  Home as HomeIcon,
+  Users,
+  Globe,
+  LogOut,
+  Menu,
+  X,
+  Plus,
   PhoneCall,
   BarChart3,
   CalendarCheck,
@@ -19,7 +19,8 @@ import {
   Zap,
   ClipboardList,
   Settings as SettingsIcon,
-  Trello
+  Trello,
+  MessageCircle,
 } from 'lucide-react';
 
 // Views
@@ -31,6 +32,7 @@ import PublicSiteView from './views/PublicSite';
 import SalesFunnelView from './views/SalesFunnel';
 import SalesUnlockerView from './views/SalesUnlocker';
 import ChecklistView from './views/Checklist';
+import WhatsAppAgentView from './views/WhatsAppAgent';
 
 const App: React.FC = () => {
   const [view, setView] = useState<AppView>('admin');
@@ -56,6 +58,7 @@ const App: React.FC = () => {
       case 'funil': return <SalesFunnelView />;
       case 'destravador': return <SalesUnlockerView />;
       case 'checklist': return <ChecklistView />;
+      case 'whatsapp-agent': return <WhatsAppAgentView />;
       default: return (
         <div className="flex flex-col items-center justify-center h-full text-slate-500">
           <SettingsIcon className="w-12 h-12 mb-4 opacity-20" />
@@ -119,9 +122,18 @@ const App: React.FC = () => {
             <SidebarItem icon={<BarChart3 />} label="Relatórios" active={adminSubView === 'relatorios'} onClick={() => setAdminSubView('relatorios')} />
           </SidebarGroup>
 
+          <SidebarGroup label="IA & Automação">
+            <SidebarItem
+              icon={<MessageCircle className="text-emerald-400" />}
+              label="Agente WhatsApp"
+              active={adminSubView === 'whatsapp-agent'}
+              onClick={() => { setAdminSubView('whatsapp-agent'); setSidebarOpen(false); }}
+            />
+            <SidebarItem icon={<Zap className="text-yellow-400" />} label="Destravador de Vendas" active={adminSubView === 'destravador'} onClick={() => setAdminSubView('destravador')} />
+          </SidebarGroup>
+
           <SidebarGroup label="Crescimento">
             <SidebarItem icon={<BookOpen />} label="Treinamento" active={adminSubView === 'treinamento'} onClick={() => setAdminSubView('treinamento')} />
-            <SidebarItem icon={<Zap className="text-yellow-400" />} label="Destravador de Vendas" active={adminSubView === 'destravador'} onClick={() => setAdminSubView('destravador')} />
             <SidebarItem icon={<ClipboardList />} label="Checklist de Documentos" active={adminSubView === 'checklist'} onClick={() => setAdminSubView('checklist')} />
           </SidebarGroup>
 

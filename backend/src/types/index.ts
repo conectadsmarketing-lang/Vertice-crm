@@ -1,87 +1,13 @@
-
-export type UserType = 'corretor' | 'imobiliaria';
-
-export interface User {
-  id: string;
-  nome: string;
-  email: string;
-  whatsapp: string;
-  tipo: UserType;
-  logo?: string;
-}
-
-export interface Photo {
-  id: string;
-  imovel_id: string;
-  imagem: string;
-  ordem: number;
-  principal: boolean;
-}
-
-export type PropertyStatus = 'ativo' | 'inativo';
-
-export interface Property {
-  id: string;
-  titulo: string;
-  valor: number;
-  bairro: string;
-  cidade: string;
-  tipo_imovel: string;
-  metragem: number;
-  dormitorios: number;
-  banheiros: number;
-  vagas: number;
-  descricao: string;
-  status: PropertyStatus;
-  usuario_id: string;
-}
-
-export type LeadStatus = 'novo' | 'em atendimento' | 'visita' | 'proposta' | 'fechado' | 'perdido';
-export type LeadOrigin = 'site' | 'whatsapp' | 'manual';
-
-export interface Lead {
-  id: string;
-  nome: string;
-  telefone: string;
-  email?: string;
-  origem: LeadOrigin;
-  imovel_id: string;
-  status: LeadStatus;
-  data_criacao: string;
-}
-
-export interface Task {
-  id: string;
-  lead_id: string;
-  titulo: string;
-  data: string;
-  concluida: boolean;
-}
-
-export type AppView = 'admin' | 'public';
-export type AdminSubView =
-  | 'dashboard'
-  | 'atendimento'
-  | 'clientes'
-  | 'funil'
-  | 'followups'
-  | 'properties'
-  | 'parceiros'
-  | 'relatorios'
-  | 'treinamento'
-  | 'destravador'
-  | 'checklist'
-  | 'settings'
-  | 'property-form'
-  | 'whatsapp-agent';
-
-// ── WhatsApp AI Agent Types ────────────────────────────────────────────────
-
 export type WAMessageType = 'text' | 'image' | 'audio' | 'video' | 'document';
 export type WAMessageStatus = 'pending' | 'sent' | 'delivered' | 'read' | 'failed';
 export type WAConversationStatus = 'bot' | 'human' | 'closed';
 export type WAConversationStage =
-  | 'greeting' | 'qualifying' | 'showing_properties' | 'scheduling' | 'qualified' | 'closed';
+  | 'greeting'
+  | 'qualifying'
+  | 'showing_properties'
+  | 'scheduling'
+  | 'qualified'
+  | 'closed';
 export type WAInstanceStatus = 'disconnected' | 'connecting' | 'connected' | 'error';
 
 export interface WAMessage {
@@ -121,6 +47,7 @@ export interface WAConversation {
   turnCount: number;
   leadId?: string;
   messages: WAMessage[];
+  geminiHistory: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>;
 }
 
 export interface WABusinessHours {
@@ -152,6 +79,14 @@ export interface WAInstance {
   phone?: string;
   qrCode?: string;
   connectedAt?: number;
+  lastSeen?: number;
+}
+
+export interface WAStorageData {
+  conversations: Record<string, WAConversation>;
+  agentConfig: WAAgentConfig;
+  instance: WAInstance;
+  analytics: WAAnalytics;
 }
 
 export interface WAAnalytics {
@@ -164,4 +99,41 @@ export interface WAAnalytics {
   newConversationsToday: number;
   avgResponseTimeMs: number;
   lastResetDate: string;
+}
+
+export interface EvolutionWebhookPayload {
+  event: string;
+  instance: string;
+  data: {
+    key: {
+      remoteJid: string;
+      fromMe: boolean;
+      id: string;
+    };
+    message?: {
+      conversation?: string;
+      extendedTextMessage?: { text: string };
+      imageMessage?: { caption?: string; url?: string };
+      audioMessage?: { url?: string };
+      videoMessage?: { caption?: string; url?: string };
+      documentMessage?: { caption?: string; url?: string; fileName?: string };
+    };
+    messageType?: string;
+    messageTimestamp?: number;
+    pushName?: string;
+    status?: string;
+  };
+}
+
+export interface WSEvent {
+  type:
+    | 'new_message'
+    | 'message_sent'
+    | 'conversation_started'
+    | 'conversation_updated'
+    | 'instance_status'
+    | 'qr_code'
+    | 'analytics_update'
+    | 'typing';
+  payload: unknown;
 }
